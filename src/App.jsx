@@ -33,9 +33,11 @@ function App() {
   const searchInput = async () => {
     let res = [];
     if (search !== "") {
-      res = await countryApi.getCountryByname(search);
+    setPage(1);
+    res = await countryApi.getCountryByname(search);
     } else {
-      res = await countryApi.getAllCountries();
+    setPage(1);
+    res = await countryApi.getAllCountries();
     }
     setCountries(res.data);
   };
@@ -103,6 +105,15 @@ function App() {
           })}
         </div>
         <ul className="pagination">
+        <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(1)}
+              className="page-link"
+            >
+              1
+            </button>
+          </li>
           <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
             <button
               disabled={page === 1}
@@ -112,13 +123,14 @@ function App() {
               Previous
             </button>
           </li>
+          
           <li
             className={`page-item ${
-              countries.length / 25 === page ? "disabled" : ""
+              countries.length / 25 === page ||countries.length<25 ? "disabled" : ""
             }`}
           >
             <button
-              disabled={countries.length / 25 === page}
+              disabled={countries.length / 25 === page || countries.length<25 }
               onClick={() => setPage(page + 1)}
               className="page-link"
             >
